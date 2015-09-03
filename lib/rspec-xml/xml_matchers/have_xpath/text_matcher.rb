@@ -9,10 +9,11 @@ module RSpecXML
         def initialize(options={})
           self.xpath = options[:xpath]
           self.text = options[:text]
+          self.namespaces = options[:namespaces]
         end
 
         def matches?(xml)
-          ::Nokogiri::XML(xml).xpath(xpath).to_a.any? { |e| e.text == text }
+          ::Nokogiri::XML(xml).xpath(xpath, namespaces).to_a.any? { |e| e.text == text }
         end
 
         def description
@@ -29,7 +30,7 @@ module RSpecXML
 
         private
 
-        attr_accessor :text, :xpath
+        attr_accessor :text, :xpath, :namespaces
       end
     end
   end

@@ -7,10 +7,11 @@ module RSpecXML
         def initialize(options={})
           self.xpath = options[:xpath]
           self.example_group = options[:example_group]
+          self.namespaces = options[:namespaces]
         end
 
         def matches?(xml)
-          ::Nokogiri::XML(xml).xpath(full_xpath).count > 0
+          ::Nokogiri::XML(xml).xpath(full_xpath, namespaces).count > 0
         end
 
         def description
@@ -30,7 +31,7 @@ module RSpecXML
           xpath_stack.join.concat(xpath)
         end
 
-        attr_accessor :xpath, :example_group
+        attr_accessor :xpath, :example_group, :namespaces
       end
     end
   end

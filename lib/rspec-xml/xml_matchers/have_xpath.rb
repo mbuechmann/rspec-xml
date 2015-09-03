@@ -1,17 +1,19 @@
 module RSpecXML
   module XMLMatchers
     class HaveXPath
-      def initialize(xpath, example_group)
+      def initialize(xpath, namespaces, example_group)
         self.matcher = Matcher.new(
           :xpath => xpath,
-          :example_group => example_group
+          :example_group => example_group,
+          :namespaces => namespaces
         )
       end
 
       def with_text(text)
         self.matcher = TextMatcher.new(
           :xpath => matcher.full_xpath,
-          :text => text.to_s
+          :text => text.to_s,
+          :namespaces => matcher.namespaces
         )
 
         self
@@ -20,7 +22,8 @@ module RSpecXML
       def with_attr(attr)
         self.matcher = AttrMatcher.new(
           :xpath => matcher.full_xpath,
-          :attr => attr
+          :attr => attr,
+          :namespaces => matcher.namespaces
         )
 
         self

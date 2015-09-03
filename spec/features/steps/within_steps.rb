@@ -28,4 +28,3 @@ steps_for :within do
     expect(@test).to raise_error(RSpec::Expectations::ExpectationNotMetError)
   end
 end
-

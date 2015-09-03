@@ -4,8 +4,8 @@ module Factory
   def self.example_group
     @example_group ||= Class.new
   end
-  def self.xpath_matcher(xpath)
-    RSpecXML::XMLMatchers::HaveXPath.new(xpath, example_group)
+  def self.xpath_matcher(xpath, namespaces = {})
+    RSpecXML::XMLMatchers::HaveXPath.new(xpath, namespaces, example_group)
   end
 end
 
@@ -13,14 +13,14 @@ describe RSpecXML::XMLMatchers::HaveXPath do
   let(:example_group) { Factory.example_group }
 
   describe '#intialize' do
-    it 'should build and save a matcher containing the supplied xpath' do
+    it 'should build and save a matcher containing the supplied xpath and namespaces' do
 
       RSpecXML::XMLMatchers::HaveXPath::Matcher.
         expects(:new).
-        with(:xpath => 'fake xpath', :example_group => example_group).
+        with(:xpath => 'fake xpath', :namespaces => { :a => 'https://www.example.com/namespace' }, :example_group => example_group).
         returns(:flag)
 
-      xpath_matcher = Factory.xpath_matcher('fake xpath')
+      xpath_matcher = Factory.xpath_matcher('fake xpath', :a => 'https://www.example.com/namespace')
       expect(xpath_matcher.send(:matcher)).to eq :flag
 
     end
@@ -31,7 +31,7 @@ describe RSpecXML::XMLMatchers::HaveXPath do
 
       RSpecXML::XMLMatchers::HaveXPath::TextMatcher.
         expects(:new).
-        with(:xpath => 'fake xpath', :text => 'blah').
+        with(:xpath => 'fake xpath', :text => 'blah', :namespaces => {}).
         returns(:flag)
 
       xpath_matcher = Factory.xpath_matcher('fake xpath').with_text('blah')
@@ -45,7 +45,7 @@ describe RSpecXML::XMLMatchers::HaveXPath do
 
       RSpecXML::XMLMatchers::HaveXPath::AttrMatcher.
         expects(:new).
-        with(:xpath => 'fake xpath', :attr => {"name" => "John Doe"}).
+        with(:xpath => 'fake xpath', :attr => {"name" => "John Doe"}, :namespaces => {}).
         returns(:flag)
 
       xpath_matcher = Factory.xpath_matcher('fake xpath').with_attr({"name" => "John Doe"})

@@ -39,6 +39,31 @@ EOS
       expect(matcher.matches?('<no></no>')).to be_falsey
     end
 
+    context 'with namespaces' do
+      it 'should return false if the supplied xml has a namesapce but the xpath does not contain the namespace' do
+        matcher = subject.class.new(:xpath => '//root/hi', :text => 'hi')
+        expect(matcher.matches?(<<EOS
+        <root xmlns="http://www.example.com/namespace">
+            <hi>hello</hi>
+            <hi>hi</hi>
+            <hi>hey</hi>
+        </root>
+EOS
+               )).to be_falsey
+      end
+
+      it 'should return true if the supplied xml has a namesapce and the xpath contains the namespace' do
+        matcher = subject.class.new(:xpath => '//ns:root/ns:hi', :text => 'hi', :namespaces => { :ns => 'http://www.example.com/namespace' })
+        expect(matcher.matches?(<<EOS
+        <root xmlns="http://www.example.com/namespace">
+            <hi>hello</hi>
+            <hi>hi</hi>
+            <hi>hey</hi>
+        </root>
+EOS
+               )).to be_truthy
+      end
+    end
   end
 
   describe '#failure_message' do

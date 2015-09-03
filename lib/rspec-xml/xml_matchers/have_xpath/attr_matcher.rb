@@ -9,10 +9,11 @@ module RSpecXML
         def initialize(options={})
           self.xpath = options[:xpath]
           self.attr = options[:attr]
+          self.namespaces = options[:namespaces]
         end
 
         def matches?(xml)
-          nodes = ::Nokogiri::XML(xml).xpath(xpath).to_a
+          nodes = ::Nokogiri::XML(xml).xpath(xpath, namespaces).to_a
           !nodes.empty? && nodes.any? do |node|
             attr.all? do |k, v|
               attr_value = node.attr(k.to_s)
@@ -35,7 +36,7 @@ module RSpecXML
 
         private
 
-        attr_accessor :attr, :xpath
+        attr_accessor :attr, :xpath, :namespaces
       end
     end
   end

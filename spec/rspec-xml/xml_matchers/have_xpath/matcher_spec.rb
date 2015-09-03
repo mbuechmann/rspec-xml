@@ -16,9 +16,21 @@ describe RSpecXML::XMLMatchers::HaveXPath::Matcher do
       expect(matcher.matches?('<hi></hi>')).to be_truthy
     end
 
-    it 'should return false if the supplied xml contains the xpath' do
+    it 'should return false if the supplied xml does not contain the xpath' do
       matcher = subject.class.new(:xpath => '//hi')
       expect(matcher.matches?('<no></no>')).to be_falsey
+    end
+  end
+
+  context 'with a namespace in the xml' do
+    it 'should return false if the supplied xml has a namesapce but the xpath does not contain the namespace' do
+      matcher = subject.class.new(:xpath => '//hi')
+      expect(matcher.matches?('<hi xmlns="https://www.example.com/namespace"></hi>')).to be_falsey
+    end
+
+    it 'should return true if the supplied xml has a namespace and the xpath contains the namespace' do
+      matcher = subject.class.new(:xpath => '//a:hi', :namespaces => {:a => 'https://www.example.com/namespace' })
+      expect(matcher.matches?('<hi xmlns="https://www.example.com/namespace"></hi>')).to be_truthy
     end
   end
 
