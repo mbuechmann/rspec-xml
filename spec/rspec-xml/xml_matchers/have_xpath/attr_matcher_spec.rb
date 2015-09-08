@@ -47,14 +47,14 @@ EOS
     context 'with namespaces' do
       it 'should return true if the supplied xml contains the xpath with supplied attributes' do
         matcher = subject.class.new(:xpath => '//root/hi', :attr => {'foo' => 'bar', 'x' => 2})
-        expect(matcher.matches?(<<EOS
-        <root>
-            <hi foo="bar" x="1"/>
-            <hi foo="bar" x="2"/>
-            <hi foo="bar" x="3"/>
-        </root>
-  EOS
-               )).to be_truthy
+        expect(matcher.matches?(<<-EOS
+          <root>
+              <hi foo="bar" x="1"/>
+              <hi foo="bar" x="2"/>
+              <hi foo="bar" x="3"/>
+          </root>
+          EOS
+        )).to be_truthy
       end
     end
 
