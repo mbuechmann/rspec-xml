@@ -21,6 +21,20 @@ gem 'rspec-xml'
 "<something>else</something>".should_not have_xpath('/something').with_text('what')
 ```
 
+### Namespaces
+
+```ruby
+# some_spec.rb
+'<something xmlns="http://www.example.com/namespace"><inside>hello</inside></something>'
+  .should_not have_xpath('/something')
+
+'<something xmlns="http://www.example.com/namespace"><inside>hello</inside></something>'
+  .should have_xpath('/ns:something', 'ns' => 'http://www.example.com/namespace')
+
+'<something xmlns="http://www.example.com/namespace"><inside>hello</inside></something>'
+  .should have_xpath('/ns:something/ns:inside', 'ns' => 'http://www.example.com/namespace')
+```
+
 ### Builder
 
 ```ruby
